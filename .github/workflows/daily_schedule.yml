@@ -1,0 +1,42 @@
+name: Daily Market Post
+on:
+  schedule:
+    - cron: '0 22 * * 1-5'
+  workflow_dispatch: # 수동 버튼
+    inputs:
+      focus_topic:
+        description: '주제'
+        required: false
+        type: string
+  repository_dispatch: # 텔레그램(API) 신호 수신
+    types: [telegram_trigger]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Script
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # 버튼 입력(inputs) 또는 텔레그램 페이로드(client_payload) 둘 다 수용
+          FOCUS_TOPIC: ${{ inputs.focus_topic || github.event.client_payload.focus_topic }}
+        run: python scripts/daily_bot.py
+      # (이하 Commit Draft 단계는 동일)
+      - name: Commit Draft
+        run: |
+          git config --global user.name 'Gemini Bot'
+          git config --global user.email 'gemini@bot.com'
+          git add _posts/*.md
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Add new post (ChatOps)" && git push)
