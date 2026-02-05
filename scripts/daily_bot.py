@@ -36,7 +36,7 @@ def generate_blog_post(market_data):
     if not GEMINI_API_KEY:
         return "Error: Gemini API Key is missing."
 
-    model = genai.GenerativeModel('gemini-2.0-flash-exp')
+    model = genai.GenerativeModel('gemini-1.5-flash')
     today_date = datetime.datetime.now(pytz.timezone('Asia/Seoul')).strftime('%Y-%m-%d')
 
     # 기본 프롬프트
