@@ -151,6 +151,8 @@ def save_and_notify(content):
             print(f"❌ [Telegram Exception] {str(e)}")
     else:
         print("⚠️ [Telegram] 토큰 또는 Chat ID가 설정되지 않았습니다.")
+        print(f"   - TELEGRAM_TOKEN 설정 여부: {'O' if TELEGRAM_TOKEN else 'X'}")
+        print(f"   - TELEGRAM_CHAT_ID 설정 여부: {'O' if TELEGRAM_CHAT_ID else 'X'}")
 
 if __name__ == "__main__":
     data = get_market_data()
