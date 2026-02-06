@@ -1,0 +1,45 @@
+name: AI Blog Daily Report
+
+on:
+  schedule:
+    - cron: '0 22 * * *'
+  repository_dispatch:
+    types: [publish_post]
+  workflow_dispatch:
+
+jobs:
+  run_automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Deps
+        run: pip install -r requirements.txt
+
+      - name: Create Post & Notify
+        if: github.event_name != 'repository_dispatch'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/generate_post.py
+
+      - name: Publish if Approved
+        if: github.event.action == 'publish_post'
+        run: |
+          latest_file=$(ls -t _posts/*.md | head -1)
+          sed -i 's/published: false/published: true/g' "$latest_file"
+
+      - name: Push Changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Automated Blog Update" || exit 0
+          git push

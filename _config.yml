@@ -1,0 +1,32 @@
+# --- 블로그 기본 정보 (필수 수정) ---
+title: "TheRichWay - 미국 주식 데이터 분석"
+email: jmp1533@gmail.com
+description: >- # 검색 결과에 노출될 블로그 설명
+  월 방문자 100만 명의 인사이트를 담은 미국 증시 데일리 리포트입니다. 
+  S&P500, 나스닥, 다우 지수 분석 및 주요 종목 전망을 냉철한 데이터로 제공합니다.
+
+# --- URL 설정 (매우 중요) ---
+# 저장소 이름이 'therichway.github.io'이므로 아래와 같이 설정합니다.
+url: "https://jmp1533.github.io"
+baseurl: "/therichway.github.io" # 저장소 이름이 ID.github.io가 아닐 경우 필수 입력
+
+# --- 블로거 정보 ---
+author: "TheRichWay"
+twitter_username: ""
+github_username: "jmp1533"
+
+# --- 빌드 및 테마 설정 ---
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag # 검색 최적화 필수 플러그인
+
+# --- 카테고리 및 고유 주소(Permalink) 설정 ---
+permalink: /:categories/:title/
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "TheRichWay"
