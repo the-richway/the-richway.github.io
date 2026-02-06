@@ -112,10 +112,11 @@ def generate_blog_post(market_data):
         return f"Error: {str(e)}"
 
 def save_and_notify(content):
-    if "Error" in content: return
+    if "Error" in content:
+        print(f"❌ [API Error] 생성이 중단되었습니다. 원인: {content}")
+        return
 
     today = datetime.datetime.now(SEOUL_TZ).strftime("%Y-%m-%d")
-    # 파일명에 시간을 포함시켜 하루에 여러 글 작성 가능하게 변경
     timestamp = datetime.datetime.now(SEOUL_TZ).strftime("%H%M")
     filename = f"_posts/{today}-market-{timestamp}.md"
 
