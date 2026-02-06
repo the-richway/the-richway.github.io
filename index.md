@@ -1,6 +1,9 @@
 ---
 layout: home
-title: "The Rich Way Report"
+title: false
 header:
   overlay_filter: 0.5
+author_profile: false
+sidebar:
+  nav: "sidebar"
 ---

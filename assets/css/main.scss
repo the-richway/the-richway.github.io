@@ -1,19 +1,34 @@
+---
+# Front Matter (대시 3개) 필수
+                       ---
+
 @import "minimal-mistakes";
 
-/* --- [사용자 커스텀 스타일] --- */
+/* ==========================================================================
+   CUSTOM CSS (사용자 요청 반영)
+   ========================================================================== */
 
-/* 1. 메인 화면 글 제목 크기 축소 */
+/* 1. 메인 화면(Home) 타이틀 강제 숨김 (안전장치) */
+.layout--home .page__title {
+  display: none !important;
+}
+
+/* 2. 글 목록 제목 사이즈 축소 */
+/* 기존 h2, h3 사이즈보다 작게 조정 (1.1rem ~ 1.25rem 추천) */
 .archive__item-title {
-  font-size: 1.1rem !important; /* 기본보다 작게 조정 (원하는 대로 숫자 변경 가능) */
+  font-size: 1.15rem !important;
   font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
-/* 2. 글 목록 간격 조정 (너무 벌어지지 않게) */
+/* 3. 사이드바(카테고리) 폰트 가독성 조정 */
+.nav__list .nav__items {
+  font-size: 0.95rem;
+}
+
+/* 4. 글 목록 요약글(Teaser) 간격 좁히기 */
 .archive__item-teaser {
-  margin-bottom: 0.5em;
-}
-
-/* 3. 모바일에서 사이드바 토글 버튼 잘 보이게 */
-.sidebar__toggle-btn {
-  font-size: 1rem;
+  font-size: 0.9rem;
+  margin-top: 0.2em;
+  margin-bottom: 1em;
 }

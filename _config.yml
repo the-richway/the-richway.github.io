@@ -22,15 +22,14 @@ plugins:
 # -----------------------
 # 미래 날짜 글도 빌드에 포함 (필수: KST/UTC 시차 문제 해결)
 future: true
-# 페이징 처리 (글이 많아질 경우)
-paginate: 10
-paginate_path: "/page:num/"
 
 # -----------------------
 # [Design & UX]
 # -----------------------
 minimal_mistakes_skin: "default" # air, contrast, dark, mint 등 변경 가능
 search: true
+paginate: 10
+paginate_path: "/page:num/"
 
 # -----------------------
 # [AdSense & Analytics]
@@ -51,13 +50,11 @@ defaults:
       type: "posts"
     values:
       layout: "single"
-      author_profile: false    # 글 읽을 때 프로필 숨김 (가독성 확보)
+      author_profile: false
       sidebar:
-        nav: "sidebar"         # 위에서 만든 navigation.yml의 sidebar 사용
-      toc: true                # 글 목차(Table of Contents) 자동 생성
-      toc_label: "목차"
-      toc_icon: "cog"
-      toc_sticky: true         # 스크롤 내려도 목차 따라옴
+        nav: "sidebar"
+      toc: true
+      toc_sticky: true
 
 # 카테고리 경로 설정 (URL을 깔끔하게)
 category_archive:
