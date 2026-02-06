@@ -7,7 +7,7 @@ import requests
 
 # --- [환경변수 및 설정] ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 FOCUS_TOPIC = os.environ.get("FOCUS_TOPIC", "")
 SEOUL_TZ = pytz.timezone('Asia/Seoul')
@@ -123,8 +123,8 @@ def save_and_notify(content):
     today = datetime.datetime.now(SEOUL_TZ).strftime("%Y-%m-%d")
     timestamp = datetime.datetime.now(SEOUL_TZ).strftime("%H%M")
 
-    # 카테고리별 폴더 구조 생성
-    category_path = "_posts/미국증시"
+    # 카테고리별 폴더 구조 생성 (영문 경로 권장)
+    category_path = "_posts/us-stock"
     os.makedirs(category_path, exist_ok=True)
 
     filename = f"{category_path}/{today}-market-{timestamp}.md"
@@ -132,12 +132,25 @@ def save_and_notify(content):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(content)
 
+    # 텔레그램 알림 전송 (디버깅 로그 추가)
     if TELEGRAM_TOKEN and TELEGRAM_CHAT_ID:
         repo = os.environ.get("GITHUB_REPOSITORY", "user/repo")
         url = f"https://github.com/{repo}/blob/main/{filename}"
         msg = f"📝 **[새로운 글 생성 완료]**\n주제: {FOCUS_TOPIC}\n\n내용 확인 후 '/publish' 하세요.\n[미리보기]({url})"
-        requests.post(f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
-                      json={"chat_id": TELEGRAM_CHAT_ID, "text": msg, "parse_mode": "Markdown"})
+
+        try:
+            response = requests.post(
+                f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+                json={"chat_id": TELEGRAM_CHAT_ID, "text": msg, "parse_mode": "Markdown"}
+            )
+            if response.status_code != 200:
+                print(f"❌ [Telegram Error] {response.status_code}: {response.text}")
+            else:
+                print("✅ [Telegram] 알림 전송 성공")
+        except Exception as e:
+            print(f"❌ [Telegram Exception] {str(e)}")
+    else:
+        print("⚠️ [Telegram] 토큰 또는 Chat ID가 설정되지 않았습니다.")
 
 if __name__ == "__main__":
     data = get_market_data()
