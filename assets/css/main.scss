@@ -1,32 +1,31 @@
 ---
-# Front Matter (대시 3개) 필수
-                       ---
+---
 
+@charset "utf-8";
 @import "minimal-mistakes";
 
 /* ==========================================================================
-   CUSTOM CSS (사용자 요청 반영)
+   CUSTOM CSS
    ========================================================================== */
 
-/* 1. 메인 화면(Home) 타이틀 강제 숨김 (안전장치) */
+/* 1. 메인 화면 타이틀 숨김 */
 .layout--home .page__title {
   display: none !important;
 }
 
-/* 2. 글 목록 제목 사이즈 축소 */
-/* 기존 h2, h3 사이즈보다 작게 조정 (1.1rem ~ 1.25rem 추천) */
+/* 2. 글 목록 제목 크기 조정 */
 .archive__item-title {
   font-size: 1.15rem !important;
   font-weight: 700;
   letter-spacing: -0.025em;
 }
 
-/* 3. 사이드바(카테고리) 폰트 가독성 조정 */
+/* 3. 사이드바 폰트 조정 */
 .nav__list .nav__items {
   font-size: 0.95rem;
 }
 
-/* 4. 글 목록 요약글(Teaser) 간격 좁히기 */
+/* 4. 요약글 간격 조정 */
 .archive__item-teaser {
   font-size: 0.9rem;
   margin-top: 0.2em;
