@@ -30,7 +30,7 @@ jobs:
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event.action == 'generate_post'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           FOCUS_TOPIC: ${{ github.event.client_payload.focus_topic }}
         run: python scripts/generate_post.py
@@ -40,7 +40,7 @@ jobs:
       - name: Publish if Approved
         if: github.event.action == 'publish_post'
         run: |
-          latest_file=$(ls -r _posts/*.md | head -1)
+          latest_file=$(ls -r _posts/us-stock/*.md | head -1)
           
           if [ -z "$latest_file" ]; then
             echo "❌ 변경할 포스팅 파일이 없습니다."
