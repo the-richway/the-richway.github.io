@@ -1,0 +1,10 @@
+# 왼쪽 사이드바 메뉴 구조
+sidebar:
+  - title: "경제·재테크"
+    children:
+      - title: "미국증시"
+        url: "/categories/미국증시/"
+  - title: "기타"
+    children:
+      - title: "공지사항"
+        url: "/categories/notice/"

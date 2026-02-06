@@ -44,14 +44,22 @@ analytics:
 # -----------------------
 # [Defaults]
 # -----------------------
+# [UI/UX: 사이드바 및 카테고리 설정]
 defaults:
   - scope:
       path: ""
       type: "posts"
     values:
       layout: "single"
-      author_profile: true
-      read_time: true
-      comments: true
-      share: true
-      related: true
+      author_profile: false    # 글 읽을 때 프로필 숨김 (가독성 확보)
+      sidebar:
+        nav: "sidebar"         # 위에서 만든 navigation.yml의 sidebar 사용
+      toc: true                # 글 목차(Table of Contents) 자동 생성
+      toc_label: "목차"
+      toc_icon: "cog"
+      toc_sticky: true         # 스크롤 내려도 목차 따라옴
+
+# 카테고리 경로 설정 (URL을 깔끔하게)
+category_archive:
+  type: liquid
+  path: /categories/
