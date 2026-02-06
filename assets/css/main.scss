@@ -31,3 +31,36 @@
   margin-top: 0.2em;
   margin-bottom: 1em;
 }
+
+/* 5. 사이드바 카테고리 UI 개선 */
+.nav__sub-title {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.3rem;
+}
+
+/* 하위 메뉴 들여쓰기 및 구분 */
+.nav__list .nav__items .nav__items {
+  margin-left: 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.nav__list .nav__items .nav__items li {
+  margin-bottom: 0.25rem;
+}
+
+.nav__list .nav__items .nav__items a {
+  color: #555;
+}
+
+.nav__list .nav__items .nav__items a:hover {
+  color: #000;
+  text-decoration: underline;
+}

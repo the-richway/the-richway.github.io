@@ -118,9 +118,13 @@ def save_and_notify(content):
 
     today = datetime.datetime.now(SEOUL_TZ).strftime("%Y-%m-%d")
     timestamp = datetime.datetime.now(SEOUL_TZ).strftime("%H%M")
-    filename = f"_posts/{today}-market-{timestamp}.md"
 
-    os.makedirs("_posts", exist_ok=True)
+    # 카테고리별 폴더 구조 생성
+    category_path = "_posts/미국증시"
+    os.makedirs(category_path, exist_ok=True)
+
+    filename = f"{category_path}/{today}-market-{timestamp}.md"
+
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(content)
 
