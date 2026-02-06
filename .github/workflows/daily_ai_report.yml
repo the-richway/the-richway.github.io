@@ -2,10 +2,10 @@ name: AI Blog Daily Report
 
 on:
   schedule:
-    - cron: '0 22 * * *'
+    - cron: '0 22 * * *'  # 한국 시간 오전 7시 자동 실행
   repository_dispatch:
-    types: [publish_post]
-  workflow_dispatch:
+    types: [generate_post, publish_post]  # [수정] 두 가지 신호를 모두 받도록 설정
+  workflow_dispatch:      # 수동 실행 허용
 
 jobs:
   run_automation:
@@ -22,24 +22,35 @@ jobs:
       - name: Install Deps
         run: pip install -r requirements.txt
 
+      # [단계 1] 포스팅 생성 로직
+      # 스케줄 실행이거나, 텔레그램에서 'generate_post' 신호가 왔을 때 실행
       - name: Create Post & Notify
-        if: github.event_name != 'repository_dispatch'
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event.action == 'generate_post'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # [수정] 텔레그램에서 전달받은 주제를 파이썬으로 전달
+          FOCUS_TOPIC: ${{ github.event.client_payload.focus_topic }}
         run: python scripts/generate_post.py
 
+      # [단계 2] 발행 승인 로직
+      # 텔레그램에서 'publish_post' 신호가 왔을 때만 실행
       - name: Publish if Approved
         if: github.event.action == 'publish_post'
         run: |
           latest_file=$(ls -t _posts/*.md | head -1)
+          if [ -z "$latest_file" ]; then
+            echo "변경할 포스팅 파일이 없습니다."
+            exit 1
+          fi
           sed -i 's/published: false/published: true/g' "$latest_file"
 
+      # [단계 3] 변경사항 반영 (Git Push)
       - name: Push Changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add .
-          git commit -m "Automated Blog Update" || exit 0
+          git commit -m "Automated Blog Update [${{ github.event_name }}]" || exit 0
           git push
