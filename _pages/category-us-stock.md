@@ -1,7 +1,7 @@
 ---
 title: "미국증시"
 layout: archive
-permalink: /categories/미국증시/
+permalink: /categories/us-stock/
 author_profile: false
 sidebar:
   nav: "sidebar"

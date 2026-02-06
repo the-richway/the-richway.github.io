@@ -73,6 +73,7 @@ def generate_blog_post(market_data):
     2. **Structure**: Use short paragraphs (2-3 lines max). Use <h3> for subtitles. Use Bullet points for key data.
     3. **Visuals**: Where appropriate, insert a simple Markdown Table or Mermaid Chart code for trends.
     4. **Tone**: Easy to understand for beginners, but professional data for experts.
+    5. **References**: Include 1-2 relevant news links if possible (e.g., "참고: [Bloomberg](https://www.bloomberg.com)").
 
     [Output Format - Front Matter must be exact]
     ---
@@ -94,6 +95,9 @@ def generate_blog_post(market_data):
 
     ## 3. 투자자 관전 포인트
     (Conclusion here)
+
+    ## 4. 주요 뉴스 및 참고 자료
+    - [뉴스 제목](링크)
     """
 
     try:

@@ -2,7 +2,7 @@ sidebar:
   - title: "경제·재테크"
     children:
       - title: "미국증시"
-        url: "/categories/미국증시/"
+        url: "/categories/us-stock/"
   - title: "기타"
     children:
       - title: "공지사항"

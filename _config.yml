@@ -61,3 +61,6 @@ defaults:
 category_archive:
   type: liquid
   path: /categories/
+
+# _pages 폴더 포함 설정
+include: ["_pages"]
