@@ -201,7 +201,7 @@ def save_and_notify(content):
             f"[👉 미리보기]({file_url})"
         )
         try:
-            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){TELEGRAM_TOKEN}/sendMessage"
+            url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
             requests.post(url, json={"chat_id": TELEGRAM_CHAT_ID, "text": msg, "parse_mode": "Markdown"})
             print("✅ 텔레그램 알림 전송 성공")
         except Exception as e:
