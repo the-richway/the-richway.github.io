@@ -47,7 +47,7 @@ def get_market_data():
 
 def get_gemini_model():
     """최신 모델 우선 선택 로직"""
-    models = ['gemini-flash-latest', 'gemini-3-pro-preview', 'gemini-3-flash-preview', 'gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']
+    models = ['gemini-flash-latest', 'gemini-3-pro-preview', 'gemini-3-flash-preview', 'gemini-2.5-pro', 'gemini-2.5-flash-lite']
     for m in models:
         try:
             model = genai.GenerativeModel(m)
@@ -226,6 +226,6 @@ def save_and_notify(content):
 if __name__ == "__main__":
     market_data = get_market_data()
     news_data = get_real_news_links()
-    
+
     post = generate_blog_post(market_data, news_data)
     save_and_notify(post)
