@@ -15,12 +15,15 @@ SEOUL_TZ = pytz.timezone('Asia/Seoul')
 
 # [디스클레이머: 작은 글씨로 하단에 부착될 문구]
 DISCLAIMER_TEXT = """
-***
-**[안내 및 면책 조항]**
-본 콘텐츠는 AI 모델을 활용하여 생성되었습니다.
-투자의 책임은 본인에게 있으며, 제공된 데이터는 지연되거나 오류가 있을 수 있습니다.
-내용에 오류가 있거나 저작권 문제가 발생할 경우, 즉시 삭제 또는 수정 조치하겠습니다.
-***
+<br><br>
+<hr>
+<p style="text-align: center; font-size: 0.9em; color: #888; line-height: 1.6;">
+    <strong>[안내 및 면책 조항]</strong><br>
+    본 콘텐츠는 인공지능(AI) 모델을 활용하여 생성되었습니다.<br>
+    투자의 책임은 전적으로 투자자 본인에게 있으며, 제공된 데이터는 일부 지연되거나 오류가 있을 수 있습니다.<br>
+    내용에 오류가 발견되거나 저작권 문제가 발생할 경우, 관리자에게 문의 주시면 즉시 수정 또는 삭제 조치하겠습니다.
+</p>
+<hr>
 """
 
 if GEMINI_API_KEY:
@@ -63,7 +66,7 @@ def generate_blog_post(market_data):
     date_str = now.strftime('%Y-%m-%d %H:%M:%S')
 
     # ---------------------------------------------------------
-    # [Step 1] 전문 경제 분석가 모드 (Professional Analyst)
+    # [Step 1] 전문 경제 분석가 모드 (뉴스 링크 정확도 강화)
     # ---------------------------------------------------------
     prompt_analyst = f"""
     [Identity & Persona]
@@ -77,9 +80,9 @@ def generate_blog_post(market_data):
     - Topic: {FOCUS_TOPIC}
 
     [Visual & Readability Requirements - CRITICAL]
-    1. **Markdown Tables**: You MUST use tables to compare indices, sectors, or stocks. Do not list numbers in plain text.
-    2. **Mermaid Charts**: Include 1 simple Mermaid chart (e.g., `pie` or `graph LR`) to visualize logic or weight.
-    3. **Formatting**: Use bold text (`**text**`) for key figures and insights to enhance readability.
+    1. **Markdown Tables**: You MUST use tables to compare indices, sectors, or stocks.
+    2. **Mermaid Charts**: Include 1 simple Mermaid chart (e.g., `pie` or `graph LR`) to visualize logic.
+    3. **Formatting**: Use bold text (`**text**`) for key figures. Ensure paragraphs are well-spaced.
 
     [Structure]
     1. **Market Pulse**: Summary Table of indices + Brief comment.
@@ -88,7 +91,7 @@ def generate_blog_post(market_data):
     4. **References**:
        - Section Title: "## 📚 주요 참고 뉴스"
        - **Requirement:** 80% Korean News (Hankyung, Maeil, Yonhap), 20% Global (Bloomberg, WSJ).
-       - **Format:** `- [News Title](URL)` (Ensure links are valid and clickable).
+       - **Link Validation:** Do NOT hallucinate fake URLs. If you don't know the exact URL, provide a search query link (e.g., `[Title](https://www.google.com/search?q=Title)`) or ensure the link is a valid format `[Title](URL)`.
 
     [Language]: Korean (Natural, Professional, Expert).
     """
@@ -111,7 +114,8 @@ def generate_blog_post(market_data):
     [Task] Final Polish.
     1. **Check Links**: Ensure all news references are in `[Title](URL)` format.
     2. **Formatting**: Ensure Markdown Tables and Mermaid codes are syntactically correct.
-    3. **Front Matter**:
+    3. **Spacing**: Ensure there is a blank line between paragraphs for better readability.
+    4. **Front Matter**:
     ---
     layout: single
     title: "YOUR_CATCHY_TITLE"
@@ -159,8 +163,7 @@ def save_and_notify(content):
     if TELEGRAM_TOKEN and TELEGRAM_CHAT_ID:
         repo = os.environ.get("GITHUB_REPOSITORY", "user/repo")
 
-        # [HTML 전송 방식 적용]
-        # URL에 특수문자가 있어도 안전하게 전송하기 위해 HTML 태그 사용
+        # [수정 완료] 순수 URL 문자열로 변경 (마크다운 문법 제거)
         file_url = f"[https://github.com/](https://github.com/){repo}/blob/main/{filepath}"
 
         msg = (
@@ -172,9 +175,11 @@ def save_and_notify(content):
         )
 
         try:
-            # parse_mode='HTML' 사용
+            # [수정 완료] API URL도 순수 문자열로 변경
+            api_url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){TELEGRAM_TOKEN}/sendMessage"
+
             response = requests.post(
-                f"[https://api.telegram.org/bot](https://api.telegram.org/bot){TELEGRAM_TOKEN}/sendMessage",
+                api_url,
                 json={"chat_id": TELEGRAM_CHAT_ID, "text": msg, "parse_mode": "HTML"}
             )
             if response.status_code == 200:
