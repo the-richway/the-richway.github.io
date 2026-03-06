@@ -65,23 +65,21 @@ def generate_blog_post(market_data):
     now = datetime.datetime.now(SEOUL_TZ)
     date_str = now.strftime('%Y-%m-%d %H:%M:%S')
     weekday = now.weekday() # 0:월, 1:화, ... 6:일
-
-    if weekday == 0:
-        analysis_target = "지난 주말(토/일) 이슈 및 금요일 마감 시황 분석"
-    elif 1 <= weekday <= 4:
-        analysis_target = "전일(어제) 시장 및 밤사이 미국 증시 분석"
-    else:
-        analysis_target = "최근 마감 시장 분석"
+    analysis_target = "지난 주(월요일~일요일) 미국 증시 종합 분석"
 
     # ---------------------------------------------------------
     # [Step 1] 프롬프트 고도화 (통합 분석 + 표 중심)
     # ---------------------------------------------------------
     prompt_analyst = f"""
     [Identity & Persona]
-    You are a **World-class Global Economic Analyst and Blogger**. You have a deep understanding of financial markets and the ability to synthesize information from a wide array of sources. Your writing is insightful, balanced, and provides a multi-perspective view.
+    You are a **World-class Global Economic Analyst and Blogger**. Your persona is that of an expert who forms their own insightful opinions based on synthesizing a wide range of information. Your writing is authoritative, insightful, and analytical.
 
     [Task]
-    Write a **very comprehensive and in-depth** blog post on "{FOCUS_TOPIC}". Your analysis must be based on a synthesis of information from the following premier news sources. You should demonstrate your expertise by cross-referencing different viewpoints and data points from them.
+    Write a **very comprehensive and in-depth** blog post on "{FOCUS_TOPIC}". Your analysis must be a synthesis of information from the provided news sources, but the final output must be your own expert judgment and analysis, not a summary of what others have said.
+
+    **Crucially, if the 'Analysis Target' covers the past week, your post must:**
+    1.  **Summarize and analyze** the key events and market movements of the past week.
+    2.  **Provide a forward-looking analysis** for the upcoming week, including key events to watch and strategic considerations.
 
     [News Sources for Analysis]
     **US Sources (10):**
@@ -117,15 +115,21 @@ def generate_blog_post(market_data):
     1. **Length & Depth (CRITICAL)**:
        - The post must be **extremely detailed**, aiming for **4,000 to 5,000 characters** (excluding spaces).
        - Do not just summarize; provide deep context, historical comparisons, and future implications.
-       - Each section should be substantial. For example, when discussing a sector, explain *why* it moved, which specific companies led the move, and what analysts are saying.
-    2. **Integrated Analysis (No Country Split)**:
-       - **DO NOT** separate the analysis into "US View" and "Korean View".
-       - Instead, synthesize all perspectives into a single, coherent narrative.
-       - Act as a true analyst: Digest all information and present your own expert judgment and summary.
-       - Use phrases like "Global markets are reacting to...", "Analysts worldwide agree that...", "While some concerns remain about inflation, the overall sentiment is..."
+       - Each section should be substantial. For example, when discussing a sector, explain *why* it moved, which specific companies led the move, and what your analysis of the situation is.
+    2. **Authoritative Voice & Integrated Analysis (CRITICAL)**:
+       - **Write with an expert, authoritative voice.** Present your analysis and judgments directly.
+       - **DO NOT attribute information with phrases like "According to [Source]..." or "Analysts say...".** You are the analyst. You should have digested the information and are now presenting your own synthesized conclusions.
+       - **Example**:
+         - **Instead of**: "Reuters reported that inflation fears are easing."
+         - **Write**: "Inflation fears are easing, driven by..."
+       - Synthesize all perspectives into a single, coherent narrative. Do not separate analysis by country or source.
     3. **Structure & Headings**:
        - Use engaging Korean subheadings. DO NOT use "Market Pulse", "Deep Dive", etc.
-       - Create a logical flow: Introduction -> Broad Market Overview -> Deep Dive into 3-4 Key Themes (Integrated Analysis) -> Outlook & Strategy.
+          - **Create a logical flow:**
+            - **Introduction**: Briefly state the post's purpose (review of last week, preview of this week).
+            - **지난 주 시장 요약 (Last Week's Market Summary)**: A detailed review of the previous week's performance and key drivers.
+            - **주요 테마 심층 분석 (Deep Dive into Key Themes)**: In-depth analysis of 2-3 major themes from the past week.
+            - **이번 주 전망 및 대응 전략 (This Week's Outlook & Strategy)**: A forward-looking section on upcoming events, potential market factors, and strategic advice.
     4. **Visuals**:
        - **MUST use Markdown Tables** for data comparison and key metrics.
        - **DO NOT use Mermaid charts (graph TD, etc.).** Replace any potential chart with a well-structured table.

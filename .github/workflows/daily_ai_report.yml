@@ -2,8 +2,8 @@ name: AI Blog Daily Report
 
 on:
   schedule:
-    # 한국 시간 기준 월~토 오전 8시 (UTC 23시)
-    - cron: '0 23 * * 0-5'
+    # 한국 시간 기준 매주 월요일 오전 8시 (UTC 23시)
+    - cron: '0 23 * * 0'
   repository_dispatch:
     types: [generate_post, publish_post]
   workflow_dispatch:
